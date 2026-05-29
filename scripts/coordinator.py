@@ -62,14 +62,14 @@ class WorkflowCoordinator:
             f.write(f"[{timestamp}] {message}\n")
 
     def write_latest_action(self, target, instruction):
-        """写入最新指令到文件（覆盖模式），同时追加到历史"""
+        """写入指令到文件（累加模式），支持 Pro 和 Flash 多任务并行"""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         # 格式：时间戳, 对象, 指令内容
         line = f"{timestamp}, {target}, {instruction}\n"
         
-        # 写入最新指令文件（覆盖）
-        with open(LATEST_ACTION_FILE, 'w', encoding='utf-8') as f:
+        # 累加写入最新指令文件（不再覆盖）
+        with open(LATEST_ACTION_FILE, 'a', encoding='utf-8') as f:
             f.write(line)
         
         # 追加到历史文件
